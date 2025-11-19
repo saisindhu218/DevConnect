@@ -30,8 +30,7 @@ import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/use-toast";
 
 /**
- * Singleton socket helper so HMR / module reloads do not create duplicate sockets.
- * We attach the socket instance to window to reuse across reloads.
+ * Singleton socket helper
  */
 const getSocket = () => {
   const globalAny = window as any;
@@ -55,6 +54,7 @@ const CollaborateRoom = () => {
 
   const [language, setLanguage] = useState("javascript");
   const [code, setCode] = useState("// Loading...");
+  const [stdin, setStdin] = useState(""); // 🔥 NEW: program input box
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [participants, setParticipants] = useState<string[]>([]);
   const [message, setMessage] = useState("");
@@ -66,7 +66,6 @@ const CollaborateRoom = () => {
   const lastEditRef = useRef(Date.now());
   const [loading, setLoading] = useState(true);
 
-  // Keep stable references to handlers so we can remove them reliably
   const handlersRef = useRef({
     participants: (list: string[]) => {},
     chat: (msg: any) => {},
@@ -92,23 +91,17 @@ const CollaborateRoom = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // ---------------------------------------------------------------------------
-  // LOAD PROJECT + SOCKET JOIN ROOM
-  // ---------------------------------------------------------------------------
+  // Load project + join socket room
   useEffect(() => {
     let mounted = true;
 
-    // define handlers and store in ref
     const handleParticipants = (list: string[]) => {
       if (mounted) setParticipants(list);
     };
 
     const handleChat = (msg: any) => {
-      // only append messages coming from *others* (server emits only to others, but keep this guard)
-      // The client already pushes its own message locally on send.
       if (!msg) return;
       setChatMessages((prev) => {
-        // Avoid duplicates - if last message identical, skip
         const last = prev[prev.length - 1];
         if (last && last.sender === msg.sender && last.message === msg.message && last.time === msg.time) {
           return prev;
@@ -137,15 +130,12 @@ const CollaborateRoom = () => {
         setCode(project.code || "");
         setLanguage(project.language || "javascript");
 
-        // join room on server
         socket.emit("join-room", roomId, username);
 
-        // Remove previous listeners to avoid duplicates (safe)
         socket.off("participants-update", handleParticipants);
         socket.off("chat-update", handleChat);
         socket.off("code-update", handleCodeUpdate);
 
-        // attach listeners
         socket.on("participants-update", handleParticipants);
         socket.on("chat-update", handleChat);
         socket.on("code-update", handleCodeUpdate);
@@ -165,33 +155,26 @@ const CollaborateRoom = () => {
 
     return () => {
       mounted = false;
+
       try {
         socket.emit("leave-room", roomId);
-      } catch (e) {
-        /* ignore */
-      }
+      } catch {}
 
-      // remove listeners
       socket.off("participants-update", handleParticipants);
       socket.off("chat-update", handleChat);
       socket.off("code-update", handleCodeUpdate);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomId, username, accessToken, navigate]);
 
-  // ---------------------------------------------------------------------------
-  // CODE CHANGE HANDLER
-  // ---------------------------------------------------------------------------
+  // Code sync + auto-save
   const handleCodeChange = useCallback(
     (value?: string) => {
       const newCode = value ?? "";
       setCode(newCode);
       lastEditRef.current = Date.now();
 
-      // emit code-change (server will broadcast to others)
       socket.emit("code-change", roomId, newCode);
 
-      // persist (best-effort)
       (async () => {
         try {
           await axiosPrivate.put(
@@ -199,9 +182,7 @@ const CollaborateRoom = () => {
             { code: newCode, language },
             { headers: { Authorization: `Bearer ${accessToken}` }, withCredentials: true }
           );
-        } catch {
-          /* ignore */
-        }
+        } catch {}
       })();
     },
     [roomId, accessToken, language]
@@ -218,9 +199,7 @@ const CollaborateRoom = () => {
     } catch {}
   };
 
-  // ---------------------------------------------------------------------------
-  // RUN + DOWNLOAD
-  // ---------------------------------------------------------------------------
+  // Run code (WITH stdin support)
   const handleRun = async () => {
     setOutput((prev) => [
       ...prev,
@@ -230,26 +209,23 @@ const CollaborateRoom = () => {
     try {
       const res = await axiosPrivate.post(
         "/api/run",
-        { language, code },
+        { language, code, stdin }, // ✔ SEND INPUT HERE
         { headers: { Authorization: `Bearer ${accessToken}` }, withCredentials: true }
       );
 
-      if (res.data?.output) {
-        setOutput((prev) => [
-          ...prev,
-          ...(res.data.output as string).split("\n"),
-        ]);
-      } else if (res.data?.error) {
-        setOutput((prev) => [...prev, `Error: ${res.data.error}`]);
-      } else {
-        setOutput((prev) => [...prev, "No output received."]);
-      }
+      const outLines: string[] = [];
+
+      if (res.data?.output) outLines.push(...res.data.output.split("\n"));
+      if (res.data?.error) outLines.push("Error:\n" + res.data.error);
+
+      setOutput((prev) => [...prev, ...outLines]);
     } catch (err: any) {
       setOutput((prev) => [...prev, `Run failed: ${err.message || err}`]);
       toast({ title: "Execution failed", variant: "destructive" });
     }
   };
 
+  // Download file
   const handleDownload = useCallback(() => {
     if (!code) {
       toast({ title: "Nothing to download", variant: "destructive" });
@@ -272,9 +248,7 @@ const CollaborateRoom = () => {
     toast({ title: "Downloaded file" });
   }, [code, language, roomId]);
 
-  // ---------------------------------------------------------------------------
-  // CHAT — emit once, server broadcasts to others only; client appends locally
-  // ---------------------------------------------------------------------------
+  // Send chat message
   const handleSendMessage = () => {
     if (!message.trim()) return;
 
@@ -284,13 +258,10 @@ const CollaborateRoom = () => {
       time: new Date().toLocaleTimeString(),
     };
 
-    // Emit to server (server will broadcast to others only)
     socket.emit("chat-message", roomId, msg);
 
-    // Add locally once (isSelf = true)
     setChatMessages((prev) => {
       const last = prev[prev.length - 1];
-      // small dedupe: if last is identical, skip
       if (last && last.sender === msg.sender && last.message === msg.message && last.time === msg.time) {
         return prev;
       }
@@ -300,9 +271,7 @@ const CollaborateRoom = () => {
     setMessage("");
   };
 
-  // ---------------------------------------------------------------------------
-  // LOADING SCREEN
-  // ---------------------------------------------------------------------------
+  // Loading screen
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0d1117] text-gray-100">
@@ -314,13 +283,11 @@ const CollaborateRoom = () => {
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // MAIN RENDER
-  // ---------------------------------------------------------------------------
   return (
     <div className="min-h-screen bg-[#0d1117] text-gray-100">
       <Navbar />
       <div className="container mx-auto px-4 py-6">
+        
         {/* Header */}
         <Card className="p-4 mb-6 bg-[#161b22] border border-gray-700">
           <div className="flex items-center justify-between">
@@ -332,6 +299,7 @@ const CollaborateRoom = () => {
                 <Clock size={14} />
                 <span>Last edited {lastEdited}</span>
               </div>
+
               <Select value={language} onValueChange={handleLanguageChange}>
                 <SelectTrigger className="w-40 bg-gray-800 text-gray-200 border-gray-600">
                   <SelectValue placeholder="Language" />
@@ -343,6 +311,7 @@ const CollaborateRoom = () => {
                   <SelectItem value="html">HTML</SelectItem>
                 </SelectContent>
               </Select>
+
               <Button
                 size="sm"
                 onClick={handleDownload}
@@ -355,10 +324,12 @@ const CollaborateRoom = () => {
           </div>
         </Card>
 
-        {/* Grid */}
         <div className="grid grid-cols-12 gap-6">
-          {/* Editor + Console */}
+          
+          {/* LEFT SIDE */}
           <div className="col-span-9 space-y-4">
+
+            {/* Editor */}
             <Card className="overflow-hidden h-[500px] bg-[#0d1117] border border-gray-700">
               <Editor
                 height="500px"
@@ -376,6 +347,18 @@ const CollaborateRoom = () => {
               />
             </Card>
 
+            {/* 🔥 Program Input Box */}
+            <Card className="p-3 bg-[#0b0f14] border border-gray-700">
+              <p className="mb-1 text-sm text-gray-400">Program Input (stdin):</p>
+              <textarea
+                value={stdin}
+                onChange={(e) => setStdin(e.target.value)}
+                placeholder="Enter input for your program, line by line..."
+                className="w-full h-20 bg-black text-gray-200 p-2 rounded resize-none"
+              />
+            </Card>
+
+            {/* Buttons */}
             <div className="flex items-center gap-2">
               <Button
                 size="sm"
@@ -423,8 +406,9 @@ const CollaborateRoom = () => {
             </Card>
           </div>
 
-          {/* Sidebar */}
+          {/* RIGHT SIDE */}
           <div className="col-span-3 space-y-6">
+
             {/* Participants */}
             <Card className="p-4 bg-[#161b22] border border-gray-700">
               <h3 className="font-bold mb-4 text-white">
@@ -491,6 +475,7 @@ const CollaborateRoom = () => {
               </div>
             </Card>
           </div>
+
         </div>
       </div>
     </div>
