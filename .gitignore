@@ -1,0 +1,77 @@
+# ============================
+# Node / Backend
+# ============================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun.lockb
+
+# Env files
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+debug.log
+error.log
+
+# PIDs
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Runtime files
+dist/
+build/
+.cache/
+.tmp/
+
+# Uploads folder (user images, files)
+backend/uploads/
+uploads/
+
+# Coverage
+coverage/
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Others
+*.tar.gz
+*.zip
+*.tgz
+
+# ============================
+# Frontend (Vite + React)
+# ============================
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.cache/
+
+# Local environment
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# ============================
+# Socket.IO temp data
+# ============================
+*.sock
+
+# ============================
+# Ignore generated Piston jobs (if stored)
+# ============================
+piston_jobs/
