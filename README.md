@@ -157,11 +157,7 @@ http://localhost:3000
 <img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/37d49ae4-ded2-4ccc-a845-9bb4ad9ff8c8" />
 <img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/b92fce9b-6243-455c-8163-328a0c5804b8" />
 <img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/c198beb1-ad55-48c5-ba67-7f297e6406ae" />
-<img width="1558" height="410" alt="Image" src="https://github.com/user-attachments/assets/6a1b6b4f-de61-471e-b2f8-4f792139dfc5" />
-<img width="863" height="516" alt="Image" src="https://github.com/user-attachments/assets/ac3adde3-6a86-44f8-b7ac-3fefad8f407e" />
-<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/b0ba3e47-bac7-455b-8bdd-43e127d40cc6" />
 <img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/9d8d955b-f3d1-4677-88f9-3d76e8f862b5" />
-<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/d274396e-35b6-419b-a8e1-993af714c53f" />
 <img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/a7a8576e-9456-4b79-826f-71bd4e7fcffa" />
 
 ##  Team Members
