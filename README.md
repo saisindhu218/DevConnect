@@ -139,7 +139,32 @@ http://localhost:3000
 
 ---
 
-## 👨‍💻 Team Members
+##  Output
+
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/9ebcf196-5499-4abc-8a7c-c2fc23fc3da5" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/822260e0-8bc4-41db-830e-24c5411d4cdd" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/3f58f9c2-eae8-44c1-a173-34460d2f6111" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/c66f255d-2ad1-4cc9-8d8e-57fc46650ee4" />
+<img width="989" height="859" alt="Image" src="https://github.com/user-attachments/assets/ef76e121-2185-459e-b1ad-c3e9334edb63" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/6ff6ac9f-b14f-4cc0-90da-32e6049abea8" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/223ec37b-21dd-4145-8275-6624dc789ae1" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/6a61a2cb-8ab1-44f9-a27f-33f077cd553b" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/9170e923-f77f-468d-919e-69e9e816805c" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/e48b96e0-9283-448d-b546-6c3e984a557f" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/eface8b9-c0de-4400-90f3-b9d166eef3e5" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/8dc4be1d-6673-49a0-b164-2973f0246d3b" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/a77e5560-9ab4-4666-ad0d-f2bd1aa6140a" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/37d49ae4-ded2-4ccc-a845-9bb4ad9ff8c8" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/b92fce9b-6243-455c-8163-328a0c5804b8" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/c198beb1-ad55-48c5-ba67-7f297e6406ae" />
+<img width="1558" height="410" alt="Image" src="https://github.com/user-attachments/assets/6a1b6b4f-de61-471e-b2f8-4f792139dfc5" />
+<img width="863" height="516" alt="Image" src="https://github.com/user-attachments/assets/ac3adde3-6a86-44f8-b7ac-3fefad8f407e" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/b0ba3e47-bac7-455b-8bdd-43e127d40cc6" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/9d8d955b-f3d1-4677-88f9-3d76e8f862b5" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/d274396e-35b6-419b-a8e1-993af714c53f" />
+<img width="1920" height="1020" alt="Image" src="https://github.com/user-attachments/assets/a7a8576e-9456-4b79-826f-71bd4e7fcffa" />
+
+##  Team Members
 
 * Rachabattuni Sai Sindhu
 * Reddy Akkamma Chandana
