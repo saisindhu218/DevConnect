@@ -4,7 +4,7 @@
 DevConnect is a **developer-centric social networking web application** built using the **MERN stack**.
 It provides a single platform where developers and students can **create profiles, share technical content, connect with peers, collaborate on projects, and participate in real-time coding sessions**.
 
----
+
 
 ##  What This Project Is About
 
@@ -18,7 +18,7 @@ DevConnect aims to solve the problem of **fragmented developer platforms** by co
 
 This makes DevConnect a **one-stop platform for learning, networking, and collaboration**.
 
----
+
 
 ##  Tech Stack Used
 
@@ -52,7 +52,7 @@ This makes DevConnect a **one-stop platform for learning, networking, and collab
 * Visual Studio Code
 * Postman (API testing)
 
----
+
 
 ##  Project Structure
 
@@ -75,7 +75,7 @@ DevConnect/
 └── README.md
 ```
 
----
+
 
 ##  Main Features
 
@@ -87,7 +87,7 @@ DevConnect/
 * Real-time collaborative coding rooms
 * Responsive UI for different screen sizes
 
----
+
 
 ##  How to Run the Project Locally
 
@@ -96,7 +96,7 @@ DevConnect/
 * Node.js (v16 or higher)
 * MongoDB (running locally or cloud)
 
----
+
 
 ### 1️ Clone the Repository
 
@@ -105,7 +105,7 @@ git clone https://github.com/saisindhu218/DevConnect.git
 cd DevConnect
 ```
 
----
+
 
 ### 2️ Run Backend
 
@@ -121,7 +121,7 @@ Server will start on:
 http://localhost:5000
 ```
 
----
+
 
 ### 3️ Run Frontend
 
@@ -137,7 +137,7 @@ Application will run on:
 http://localhost:3000
 ```
 
----
+
 
 ##  Output
 
